@@ -12,10 +12,12 @@
             :key="todo.id" 
             class="todo-item">
             <div class="todo-item-left">
+                <input type="checkbox" v-model="todo.completed">
                 <div 
                     v-if="!todo.editing" 
                     @dblclick="editTodo(todo)" 
-                    class="todo-item-label">
+                    class="todo-item-label" 
+                    :class="{ completed : todo.completed}">
                     {{ todo.title }}
                 </div>
                 <input 
@@ -163,6 +165,12 @@ export default {
         &:focus {
             outline: none;   
         }
+   }
+
+
+   .completed {
+       text-decoration: line-through;
+       color: grey;
    }
         
 </style>
