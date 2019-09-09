@@ -11,8 +11,11 @@
             v-for="(todo, index) in todos" 
             :key="todo.id" 
             class="todo-item">
-            <div class="todo-item-left">
-                <input type="checkbox" v-model="todo.completed">
+            <div 
+                class="todo-item-left">
+                <input 
+                    type="checkbox" 
+                    v-model="todo.completed">
                 <div 
                     v-if="!todo.editing" 
                     @dblclick="editTodo(todo)" 
@@ -31,10 +34,27 @@
                     @keyup.esc="cancelEdit(todo)">
 
             </div>
-            <div class="remove-item" @click="removeTodo(index)">
+            <div 
+                class="remove-item" 
+                @click="removeTodo(index)">
                 &times; 
             </div>
-        </div>    
+        </div>  
+        <div 
+            class="extra-container"> 
+            <div>
+                <label>
+                    <input
+                        type="checkbox"
+                        :checked="!anyRemaining"
+                        @change="checkAllTodos">
+                        Check all
+                </label>
+            </div>
+            <div>
+                {{ remaining }} items left 
+            </div> 
+        </div>         
     </div>
 </template>
 
@@ -60,6 +80,16 @@ export default {
                     'editing': false
                 },
             ]
+        }
+    },
+    computed: {
+        remaining() {
+            return this.todos.filter(todo => !todo.completed).length
+
+        },
+        anyRemaining() {
+            return this.remaining != 0
+
         }
     },
 
@@ -108,6 +138,9 @@ export default {
 
         removeTodo(index) {
             this.todos.splice(index, 1);
+        },
+        checkAllTodos() {
+            this.todos.forEach((todo) => todo.completed = event.target.checked)
         }
     }
 }
@@ -122,7 +155,7 @@ export default {
         margin-bottom: 18px;
 
         &:focus {
-            ooutline: 0;
+            outline: 0;
         }
     }
 
@@ -134,43 +167,71 @@ export default {
     }
 
 
-   .remove-item {
-       cursor: pointer;
-       margin-left: 14px;
-       &:hover {
-           color: black;
-       }
+    .remove-item {
+        cursor: pointer;
+        margin-left: 14px;
+        &:hover {
+            color: black;
+        }
    }
 
-   .todo-item-left {
-       display: flex;
-       align-items: center;
-   }
+    .todo-item-left {
+        display: flex;
+        align-items: center;
+    }
 
-   .todo-list-label {
-       padding: 10px;
-       border: 1px solid white;
-       margin-left: 12px;
-   }
+    .todo-list-label {
+        padding: 10px;
+        border: 1px solid white;
+        margin-left: 12px;
+    }
 
-   .todo-item-edit {
-       font-size: 24px;
-       color: #2c3e50;
-       margin-left: 12px;
-       width: 100%;
-       padding: 10px;
-       border: 1px solid #ccc;
-       font-family: 'Avenir', Helvetica, Arial, Sans-serif;
+    .todo-item-edit {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-left: 12px;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-family: 'Avenir', Helvetica, Arial, Sans-serif;
     
         &:focus {
             outline: none;   
         }
-   }
+    }
 
 
-   .completed {
-       text-decoration: line-through;
-       color: grey;
-   }
+    .completed {
+        text-decoration: line-through;
+        color: grey;
+    }
+
+    .extra-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size:  16px;
+        border-top: 1px solid lightgrey;
+        padding-top: 14px;
+        margin-bottom: 14px;
+    }
+
+    button {
+        font-size: 14px;
+        background-color: white;
+        appearance: none;
+
+        &:hover {
+            background: lightgreen;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .active {
+        background-color: lightgreen;
+    }
         
 </style>
